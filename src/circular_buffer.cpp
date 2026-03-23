@@ -8,17 +8,11 @@
 //
 
 #include <boost/buffers/circular_buffer.hpp>
-#include <boost/buffers/type_traits.hpp>
 #include <boost/buffers/detail/except.hpp>
 #include <boost/assert.hpp>
-#include <boost/static_assert.hpp>
 
 namespace boost {
 namespace buffers {
-
-BOOST_STATIC_ASSERT(
-    is_dynamic_buffer<
-        circular_buffer>::value);
 
 auto
 circular_buffer::
@@ -26,15 +20,12 @@ data() const noexcept ->
     const_buffers_type
 {
     if(in_pos_ + in_len_ <= cap_)
-        return {
-            const_buffer{
-                base_ + in_pos_, in_len_ },
-            const_buffer{ base_, 0} };
-    return {
-        const_buffer{
-            base_ + in_pos_, cap_ - in_pos_},
-        const_buffer{
-            base_, in_len_- (cap_ - in_pos_)}};
+        return {{
+            const_buffer{ base_ + in_pos_, in_len_ },
+            const_buffer{ base_, 0} }};
+    return {{
+        const_buffer{ base_ + in_pos_, cap_ - in_pos_},
+        const_buffer{ base_, in_len_- (cap_ - in_pos_)} }};
 }
 
 auto
@@ -50,15 +41,12 @@ prepare(std::size_t n) ->
     auto const pos = (
         in_pos_ + in_len_) % cap_;
     if(pos + n <= cap_)
-        return {
-            mutable_buffer{
-                base_ + pos, n},
-            mutable_buffer{base_, 0}};
-    return {
-        mutable_buffer{
-            base_ + pos, cap_ - pos},
-        mutable_buffer{
-            base_, n - (cap_ - pos)}};
+        return {{
+            mutable_buffer{ base_ + pos, n },
+            mutable_buffer{ base_, 0 } }};
+    return {{
+        mutable_buffer{ base_ + pos, cap_ - pos },
+        mutable_buffer{ base_, n - (cap_ - pos) } }};
 }
 
 void
@@ -85,10 +73,20 @@ consume(
     }
     else
     {
-        // make prepare return a
-        // bigger single buffer
-        in_pos_ = 0;
-        in_len_ = 0;
+        // preserve in_pos_ if there is
+        // a prepared buffer
+        if(out_size_ != 0)
+        {
+            in_pos_ = (in_pos_ + in_len_) % cap_;
+            in_len_ = 0;
+        }
+        else
+        {
+            // make prepare return a
+            // bigger single buffer
+            in_pos_ = 0;
+            in_len_ = 0;
+        }
     }
 }
 

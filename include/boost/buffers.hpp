@@ -10,23 +10,25 @@
 #ifndef BOOST_BUFFERS_HPP
 #define BOOST_BUFFERS_HPP
 
-#include <boost/buffers/algorithm.hpp>
-#include <boost/buffers/buffer_copy.hpp>
-#include <boost/buffers/buffer_size.hpp>
+#include <boost/buffers/any_buffers.hpp>
+#include <boost/buffers/any_read_source.hpp>
+#include <boost/buffers/any_sink.hpp>
+#include <boost/buffers/any_source.hpp>
+#include <boost/buffers/any_stream.hpp>
+#include <boost/buffers/buffer.hpp>
+#include <boost/buffers/buffer_pair.hpp>
 #include <boost/buffers/circular_buffer.hpp>
-#include <boost/buffers/const_buffer.hpp>
-#include <boost/buffers/const_buffer_pair.hpp>
-#include <boost/buffers/const_buffer_span.hpp>
-#include <boost/buffers/const_buffer_subspan.hpp>
+#include <boost/buffers/copy.hpp>
+#include <boost/buffers/data_source.hpp>
+#include <boost/buffers/dynamic_buffer.hpp>
+#include <boost/buffers/error.hpp>
 #include <boost/buffers/flat_buffer.hpp>
+#include <boost/buffers/front.hpp>
 #include <boost/buffers/make_buffer.hpp>
-#include <boost/buffers/mutable_buffer.hpp>
-#include <boost/buffers/mutable_buffer_pair.hpp>
-#include <boost/buffers/mutable_buffer_span.hpp>
-#include <boost/buffers/mutable_buffer_subspan.hpp>
 #include <boost/buffers/range.hpp>
+#include <boost/buffers/read_source.hpp>
+#include <boost/buffers/slice.hpp>
 #include <boost/buffers/string_buffer.hpp>
-#include <boost/buffers/tag_invoke.hpp>
-#include <boost/buffers/type_traits.hpp>
+#include <boost/buffers/to_string.hpp>
 
 #endif

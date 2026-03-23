@@ -12,6 +12,10 @@
 
 #include <boost/config.hpp>
 
+#if __has_include(<version>)
+# include <version>
+#endif
+
 namespace boost {
 namespace buffers {
 
@@ -58,19 +62,23 @@ namespace buffers {
     return ::boost::system::error_code((ev), &loc ## __LINE__)
 #endif
 
-//------------------------------------------------
+//-----------------------------------------------
+
+#if defined(__cpp_lib_coroutine) && __cpp_lib_coroutine >= 201902L
+# define BOOST_BUFFERS_HAS_CORO 1
+#elif defined(__cpp_impl_coroutine) && __cpp_impl_coroutines >= 201902L
+# define BOOST_BUFFERS_HAS_CORO 1
+#endif
+
+//-----------------------------------------------
 
 // avoid all of Boost.TypeTraits for just this
+namespace detail {
 template<class...> struct make_void { typedef void type; };
 template<class... Ts> using void_t = typename make_void<Ts...>::type;
+} // detail
 
 } // buffers
 } // boost
-
-// Trick boostdep into requiring URL
-// since we need it for the unit tests
-#ifdef BOOST_BUFFERS_BOOSTDEP
-#include <boost/url/url.hpp>
-#endif
 
 #endif

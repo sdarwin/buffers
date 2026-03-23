@@ -4,7 +4,7 @@
 # Distributed under the Boost Software License, Version 1.0. (See accompanying
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
-# Official repository: https://github.com/CPPAlliance/buffers
+# Official repository: https://github.com/cppalliance/buffers
 #
 
 import path ;
@@ -41,7 +41,12 @@ explicit buffers_sources ;
 lib boost_buffers
    : buffers_sources
    : requirements
+     <library>/boost//system
+     <library>/boost//capy
+     <include>../
    : usage-requirements
+     <library>/boost//system
+     <library>/boost//capy
    ;
 
 boost-install boost_buffers ;

@@ -10,8 +10,7 @@
 #ifndef BOOST_BUFFERS_STRING_BUFFER_HPP
 #define BOOST_BUFFERS_STRING_BUFFER_HPP
 
-#include <boost/buffers/const_buffer.hpp>
-#include <boost/buffers/mutable_buffer.hpp>
+#include <boost/buffers/buffer.hpp>
 #include <boost/buffers/detail/except.hpp>
 #include <boost/assert.hpp>
 #include <string>
@@ -40,11 +39,8 @@ public:
     std::size_t out_size_ = 0;
 
 public:
-    using const_buffers_type =
-        const_buffer;
-
-    using mutable_buffers_type =
-        mutable_buffer;
+    using const_buffers_type = const_buffer;
+    using mutable_buffers_type = mutable_buffer;
 
     ~basic_string_buffer()
     {
@@ -108,9 +104,8 @@ public:
     const_buffers_type
     data() const noexcept
     {
-        return {
-            s_->data(),
-            in_size_ };
+        return const_buffers_type(
+            s_->data(), in_size_);
     }
 
     mutable_buffers_type
@@ -123,14 +118,11 @@ public:
         if( s_->size() < in_size_ + n)
             s_->resize(in_size_ + n);
         out_size_ = n;
-        return {
-            &(*s_)[in_size_],
-            out_size_ };
+        return mutable_buffers_type(
+            &(*s_)[in_size_], out_size_);
     }
 
-    void
-    commit(
-        std::size_t n) noexcept
+    void commit(std::size_t n) noexcept
     {
         if(n < out_size_)
             in_size_ += n;
@@ -139,9 +131,7 @@ public:
         out_size_ = 0;
     }
 
-    void
-    consume(
-        std::size_t n) noexcept
+    void consume(std::size_t n) noexcept
     {
         if(n < in_size_)
         {
